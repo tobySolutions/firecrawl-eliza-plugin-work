@@ -23,16 +23,6 @@ export interface ScrapeResponse {
     };
 }
 
-export interface CrawlResponse {
-    id: string;
-    url: string;
-}
-
-export interface ExtractResponse {
-    id: string;
-    url: string;
-}
-
 export interface SearchResponse {
     data: {
         title: string;

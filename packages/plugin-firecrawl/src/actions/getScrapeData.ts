@@ -6,6 +6,7 @@ import {
     IAgentRuntime,
     Memory,
     State,
+    generateText,
 } from "@elizaos/core";
 import { validateFirecrawlConfig } from "../environment";
 import { getScrapedDataExamples } from "../examples";
@@ -14,8 +15,25 @@ import { extractUrl } from "../utils";
 
 export const getScrapeDataAction: Action = {
     name: "FIRECRAWL_GET_SCRAPED_DATA",
-    similes: ["FETCH SCRAPED DATA", "GET SCRAPED DATA", "SCRAPE DATA", "SCRAPE URL", "SCRAPE WEBSITE"],
-    description: "Fetch scraped data using the Firecrawl API",
+    similes: [
+        "SCRAPE_WEBSITE",
+        "LOOKUP",
+        "RETURN_DATA",
+        "FIND_ONLINE",
+        "QUERY",
+        "FETCH_PAGE",
+        "EXTRACT_CONTENT",
+        "GET_WEBPAGE",
+        "CRAWL_SITE",
+        "READ_WEBPAGE",
+        "PARSE_URL",
+        "GET_SITE_DATA",
+        "RETRIEVE_PAGE",
+        "SCAN_WEBSITE",
+        "ANALYZE_URL",
+    ],
+    description:
+        "Used to scrape information from a website related to the message, summarize it and return a response.",
     validate: async (runtime: IAgentRuntime) => {
         await validateFirecrawlConfig(runtime);
         return true;
@@ -44,33 +62,15 @@ export const getScrapeDataAction: Action = {
             }
 
             elizaLogger.info(`Found URL: ${url}`);
-            const scrapeData = (await firecrawlService.getScrapeData(url));
+            const scrapeData = await firecrawlService.getScrapeData(url);
             console.log("Final scrapeData: ", scrapeData);
             elizaLogger.success(`Successfully fectched crawl data`);
 
-            // Format the response data
-            const formattedResponse = {
-                text: "Here's what I found:",
-                content: {
-                    markdown: scrapeData?.data?.markdown || 'No content available',
-                    metadata: {
-                        title: scrapeData?.data?.title?.trim() || 'No title available',
-                        description: scrapeData?.data?.metadata?.description || 'No description available',
-                        url: scrapeData?.data?.metadata?.url || url,
-                        language: scrapeData?.data?.metadata?.language || 'not specified',
-                        statusCode: scrapeData?.data?.metadata?.statusCode || 'unknown',
-                        ogImage: scrapeData?.data?.metadata?.ogImage || null,
-                        ogTitle: scrapeData?.data?.metadata?.ogTitle || null,
-                        ogDescription: scrapeData?.data?.metadata?.ogDescription || null
-                    }
-                }
-            };
-
+          
             if (callback) {
-                elizaLogger.info('response: ', scrapeData);
+                elizaLogger.info("response: ", scrapeData);
                 callback({
-                    text: `Scraped data: ${JSON.stringify(formattedResponse.content)}`,
-                    content: formattedResponse.content
+                    text: `Scraped data: ${JSON.stringify(scrapeData)}`,
                 });
                 return true;
             }

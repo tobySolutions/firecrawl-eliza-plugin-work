@@ -60,19 +60,19 @@ export const getScrapedDataExamples: ActionExample[][] = [
     ],
 ];
 
-export const getCrawlDataExamples: ActionExample[][] = [
+export const getSearchDataExamples: ActionExample[][] = [
     [
         {
             user: "{{user1}}",
             content: {
-                text: "Can you fetch the content from https://example.com",
+                text: "Find the latest news about SpaceX launches.",
             },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "I'll fetch the content from that website for you.",
-                action: "FIRECRAWL_GET_CRAWL_DATA",
+                text: "Here is the latest news about SpaceX launches:",
+                action: "WEB_SEARCH",
             },
         },
     ],
@@ -80,29 +80,14 @@ export const getCrawlDataExamples: ActionExample[][] = [
         {
             user: "{{user1}}",
             content: {
-                text: "Get data from www.example.com",
+                text: "Can you find details about the iPhone 16 release?",
             },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "I'll get the data from that website for you.",
-                action: "FIRECRAWL_GET_CRAWL_DATA",
-            },
-        },
-    ],
-    [
-        {
-            user: "{{user1}}",
-            content: {
-                text: "I need information from example.com/page",
-            },
-        },
-        {
-            user: "{{agent}}",
-            content: {
-                text: "I'll crawl that webpage and get the information for you.",
-                action: "FIRECRAWL_GET_CRAWL_DATA",
+                text: "Here are the details I found about the iPhone 16 release:",
+                action: "WEB_SEARCH",
             },
         },
     ],
@@ -110,26 +95,27 @@ export const getCrawlDataExamples: ActionExample[][] = [
         {
             user: "{{user1}}",
             content: {
-                text: "I want to analyze a website.",
+                text: "What is the schedule for the next FIFA World Cup?",
             },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "Which website would you like me to analyze? Please provide the URL.",
+                text: "Here is the schedule for the next FIFA World Cup:",
+                action: "WEB_SEARCH",
             },
         },
+    ],
+    [
         {
             user: "{{user1}}",
-            content: {
-                text: "https://example.com",
-            },
+            content: { text: "Check the latest stock price of Tesla." },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "I'll analyze that website for you.",
-                action: "FIRECRAWL_GET_CRAWL_DATA",
+                text: "Here is the latest stock price of Tesla I found:",
+                action: "WEB_SEARCH",
             },
         },
     ],
@@ -137,26 +123,42 @@ export const getCrawlDataExamples: ActionExample[][] = [
         {
             user: "{{user1}}",
             content: {
-                text: "I need to crawl some data.",
+                text: "What are the current trending movies in the US?",
             },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "I can help you crawl website data. Please share the URL you'd like me to analyze.",
+                text: "Here are the current trending movies in the US:",
+                action: "WEB_SEARCH",
             },
         },
+    ],
+    [
         {
             user: "{{user1}}",
             content: {
-                text: "www.example.com",
+                text: "What is the latest score in the NBA finals?",
             },
         },
         {
-            user: "{{agent}}",
+            user: "{{agentName}}",
             content: {
-                text: "I'll crawl that website and get the data for you.",
-                action: "FIRECRAWL_GET_CRAWL_DATA",
+                text: "Here is the latest score from the NBA finals:",
+                action: "WEB_SEARCH",
+            },
+        },
+    ],
+    [
+        {
+            user: "{{user1}}",
+            content: { text: "When is the next Apple keynote event?" },
+        },
+        {
+            user: "{{agentName}}",
+            content: {
+                text: "Here is the information about the next Apple keynote event:",
+                action: "WEB_SEARCH",
             },
         },
     ],

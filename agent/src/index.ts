@@ -1048,9 +1048,9 @@ const startAgents = async () => {
     let charactersArg = args.characters || args.character;
     let characters = [tobyAgentCharacter];
 
-    // if (charactersArg) {
-    //     characters = await loadCharacters(charactersArg);
-    // }
+    if (charactersArg) {
+        characters = await loadCharacters(charactersArg);
+    }
 
     try {
         for (const character of characters) {
