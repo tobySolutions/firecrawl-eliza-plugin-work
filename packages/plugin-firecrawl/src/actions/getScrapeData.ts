@@ -12,6 +12,8 @@ import { validateFirecrawlConfig } from "../environment";
 import { getScrapedDataExamples } from "../examples";
 import { createFirecrawlService } from "../services";
 import { extractUrl } from "../utils";
+import { scrapeDataPrompt } from "../templates";
+import { ModelClass } from "@elizaos/core";
 
 export const getScrapeDataAction: Action = {
     name: "FIRECRAWL_GET_SCRAPED_DATA",
@@ -33,7 +35,7 @@ export const getScrapeDataAction: Action = {
         "ANALYZE_URL",
     ],
     description:
-        "Used to scrape information from a website related to the message, summarize it and return a response.",
+        "Used to scrape information from a website related to the message, summarize it and return a response. If you need info about something give a link and the plugin will scrape the data from the website and return a response.",
     validate: async (runtime: IAgentRuntime) => {
         await validateFirecrawlConfig(runtime);
         return true;
@@ -66,11 +68,27 @@ export const getScrapeDataAction: Action = {
             console.log("Final scrapeData: ", scrapeData);
             elizaLogger.success(`Successfully fectched crawl data`);
 
-          
+            const responseText = await generateText({
+                runtime,
+                context: `This was the user question: ${message.content.text}
+
+                        The Response data from firecrawl Scrape Data API is given below
+
+                        ${JSON.stringify(scrapeData)}
+
+                        Now Summarise and use this data and provide a response to question asked in the format.
+                        Note: The response should be in the same language as the question asked and should be human readable and make sense to the user
+                        Do not add any other text or comments to the response just the answer to the question
+                        Remove \n \r, special characters and html tags from the response
+                        `,
+                modelClass: ModelClass.SMALL,
+                customSystemPrompt: scrapeDataPrompt,
+            });
+
             if (callback) {
                 elizaLogger.info("response: ", scrapeData);
                 callback({
-                    text: `Scraped data: ${JSON.stringify(scrapeData)}`,
+                    text: `Scraped data: ${JSON.stringify(responseText)}`,
                 });
                 return true;
             }

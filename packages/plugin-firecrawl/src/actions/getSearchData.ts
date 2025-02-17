@@ -13,7 +13,7 @@ import {
 import { validateFirecrawlConfig } from "../environment";
 import { getSearchDataExamples } from "../examples";
 import { createFirecrawlService } from "../services";
-import { getSearchDataContext, getSearchDataPrompt } from "../templates";
+import { searchDataPrompt } from "../templates";
 import { ModelClass } from "@elizaos/core";
 
 export const getSearchDataAction: Action = {
@@ -57,23 +57,21 @@ export const getSearchDataAction: Action = {
 
             elizaLogger.success(`Successfully fectched data`);
 
-            const context = composeContext({
-                state,
-                template: getSearchDataContext,
-            });
-
             const responseText = await generateText({
                 runtime,
-                context: `This was the user question
-                        ${message.content.text}
+                context: `This was the user question: ${message.content.text}
 
-                        The Response data from firecrawl Search API
+                        The Response data from firecrawl Search API is given below
 
-                        ${searchData}
+                        ${JSON.stringify(searchData)}
 
-                     Now Summarise and use this data and provide a response to question asked`,
+                        Now Summarise and use this data and provide a response to question asked in the format.
+                        Note: The response should be in the same language as the question asked and should be human readable and make sense to the user
+                        Do not add any other text or comments to the response just the answer to the question
+                        Remove \n \r, special characters and html tags from the response
+                        `,
                 modelClass: ModelClass.SMALL,
-                customSystemPrompt: getSearchDataPrompt,
+                customSystemPrompt: searchDataPrompt,
             });
 
             console.log("responseText", responseText);
